@@ -2,7 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import cache from 'express-aggressive-cache';
 import express from 'express';
-import { getFearAndGreedIndex } from './parsers';
+import { getFearAndGreedIndex, getVix } from './parsers';
 
 const app = express();
 
@@ -17,6 +17,13 @@ app.use(
 
 app.get('/fgi', async (_req, res) => {
     const data = await getFearAndGreedIndex();
+    res.json({
+        data,
+    });
+});
+
+app.get('/vix', async (_req, res) => {
+    const data = await getVix();
     res.json({
         data,
     });
