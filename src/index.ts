@@ -45,7 +45,8 @@ app.get('/usd', async (_req, res) => {
 app.get('/company', async (_req, res) => {
     const tempUrl =
         'https://simplywall.st/stocks/ru/banks/mcx-sber/sberbank-of-russia-shares';
-    const data = await getCompanyReport(tempUrl);
+    const tempUrl2 = 'https://simplywall.st/stocks/us/tech/nasdaq-csco/cisco-systems'
+    const data = await getCompanyReport(tempUrl2);
     res.json({
         data,
     });

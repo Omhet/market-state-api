@@ -34,8 +34,21 @@ export const getCompanyReport = async (companyUrl: string) => {
     const doc = await getDocumentElement(companyUrl);
 
     const name = getText(doc, '[data-cy-id="company-header-title"]');
+    const summary = getText(doc, '[data-cy-id="company-summary-desc"] span');
+    const thesis = getText(doc, '[data-cy-id="company-fundamentals-desc"]');
 
-    return { name };
+    let risksAndRewardsRaw = Array.from(
+        doc.querySelectorAll('[data-cy-id="risk-reward-wrapper"] > *')
+    ).map((el) => el.textContent);
+    risksAndRewardsRaw = risksAndRewardsRaw.slice(
+        0,
+        risksAndRewardsRaw.length - 2
+    );
+    const riskIndex = risksAndRewardsRaw.indexOf('Risk Analysis');
+    const rewards = risksAndRewardsRaw.slice(1, riskIndex);
+    const risks = risksAndRewardsRaw.slice(riskIndex + 1);
+
+    return { name, summary, thesis, risksAndRewards: { rewards, risks } };
 };
 
 // TODO: Search for a company by a ticker or name
