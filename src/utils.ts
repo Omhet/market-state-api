@@ -1,3 +1,5 @@
+import { BaseOptions, JSDOM } from 'jsdom';
+
 export const getText = (element: Element | Document, selector: string) => {
     return element.querySelector(selector)?.textContent?.trim();
 };
@@ -17,4 +19,14 @@ export const getBackroundImage = (
 
 export const getLink = (element: Element | Document, selector: string) => {
     return element.querySelector(selector)?.getAttribute('href');
+};
+
+export const getDocumentElement = async (
+    url: string,
+    options?: BaseOptions
+) => {
+    const {
+        window: { document },
+    } = await JSDOM.fromURL(url, options);
+    return document;
 };

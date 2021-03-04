@@ -1,47 +1,47 @@
 import { JSDOM } from 'jsdom';
-import { getBackroundImage } from './utils';
-
-const parserOptions = {
-    referrer: 'https://example.com/',
-};
+import { getBackroundImage, getDocumentElement, getText } from './utils';
 
 const FearAndGreedIndexUrl = 'https://money.cnn.com/data/fear-and-greed';
 const VixUrl = 'https://www.cnbc.com/quotes/.VIX';
 const UsdRubUrl = 'https://www.marketwatch.com/investing/currency/usdrub';
 
 export const getFearAndGreedIndex = async () => {
-    const dom = await JSDOM.fromURL(`${FearAndGreedIndexUrl}`, parserOptions);
-    const { document } = dom.window;
-    return getBackroundImage(document, '#needleChart');
+    const doc = await getDocumentElement(FearAndGreedIndexUrl);
+
+    return getBackroundImage(doc, '#needleChart');
 };
 
 export const getVix = async () => {
-    const dom = await JSDOM.fromURL(`${VixUrl}`, parserOptions);
-    const { document } = dom.window;
-    const value = document.querySelector('.QuoteStrip-lastPrice')?.textContent;
-    const weekRange = document.querySelector('.QuoteStrip-fiftyTwoWeekRange')
-        ?.textContent;
+    const doc = await getDocumentElement(VixUrl);
+
+    const value = getText(doc, '.QuoteStrip-lastPrice');
+    const weekRange = getText(doc, '.QuoteStrip-fiftyTwoWeekRange');
 
     return { value, weekRange };
 };
 
 export const getUsdRub = async () => {
-    const dom = await JSDOM.fromURL(`${UsdRubUrl}`, parserOptions);
-    const { document } = dom.window;
-    const value = document.querySelector('.intraday__price .value')
-        ?.textContent;
-    const weekRange = document.querySelectorAll('.kv__item .primary')[2]
+    const doc = await getDocumentElement(UsdRubUrl);
+
+    const value = getText(doc, '.intraday__price .value');
+    const weekRange = doc.querySelectorAll('.kv__item .primary')[2]
         ?.textContent;
 
     return { value, weekRange };
 };
 
+export const getCompanyReport = async (companyUrl: string) => {
+    const doc = await getDocumentElement(companyUrl);
+
+    const name = getText(doc, '[data-cy-id="company-header-title"]');
+
+    return { name };
+};
+
 // TODO: Search for a company by a ticker or name
-export const getCompanyReport = async () => {
+export const searchForCompany = async () => {
     const dom = await JSDOM.fromURL('https://simplywall.st/stocks/ru', {
-        ...parserOptions,
         runScripts: 'dangerously',
-        pretendToBeVisual: true,
     });
     const { document } = dom.window;
     const state = dom.window.REDUX_STATE;

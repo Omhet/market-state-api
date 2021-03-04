@@ -2,7 +2,13 @@ import compression from 'compression';
 import cors from 'cors';
 import cache from 'express-aggressive-cache';
 import express from 'express';
-import { getFearAndGreedIndex, getCompanyReport, getVix, getUsdRub } from './parsers';
+import {
+    getFearAndGreedIndex,
+    searchForCompany,
+    getVix,
+    getUsdRub,
+    getCompanyReport,
+} from './parsers';
 
 const app = express();
 
@@ -37,12 +43,20 @@ app.get('/usd', async (_req, res) => {
 });
 
 app.get('/company', async (_req, res) => {
-    const data = await getCompanyReport();
+    const tempUrl =
+        'https://simplywall.st/stocks/ru/banks/mcx-sber/sberbank-of-russia-shares';
+    const data = await getCompanyReport(tempUrl);
     res.json({
         data,
     });
 });
 
+app.get('/search', async (_req, res) => {
+    const data = await searchForCompany();
+    res.json({
+        data,
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
