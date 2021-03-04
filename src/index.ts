@@ -2,7 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import cache from 'express-aggressive-cache';
 import express from 'express';
-import { getFearAndGreedIndex, getVix } from './parsers';
+import { getFearAndGreedIndex, getCompanyReport, getVix } from './parsers';
 
 const app = express();
 
@@ -28,6 +28,14 @@ app.get('/vix', async (_req, res) => {
         data,
     });
 });
+
+app.get('/company', async (_req, res) => {
+    const data = await getCompanyReport();
+    res.json({
+        data,
+    });
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

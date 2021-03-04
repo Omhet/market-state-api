@@ -17,8 +17,24 @@ export const getFearAndGreedIndex = async () => {
 export const getVix = async () => {
     const dom = await JSDOM.fromURL(`${VixUrl}`, parserOptions);
     const { document } = dom.window;
-    const value = document.querySelector<HTMLElement>('.QuoteStrip-lastPrice')?.textContent;
-    const weekRange = document.querySelector<HTMLElement>('.QuoteStrip-fiftyTwoWeekRange')?.textContent;
+    const value = document.querySelector<HTMLElement>('.QuoteStrip-lastPrice')
+        ?.textContent;
+    const weekRange = document.querySelector<HTMLElement>(
+        '.QuoteStrip-fiftyTwoWeekRange'
+    )?.textContent;
 
     return { value, weekRange };
+};
+
+export const getCompanyReport = async () => {
+    // TODO: Search for a company by a ticker or name
+    const dom = await JSDOM.fromURL('https://simplywall.st/stocks/ru', {
+        ...parserOptions,
+        runScripts: 'dangerously',
+        pretendToBeVisual: true,
+    });
+    const { document } = dom.window;
+    const state = dom.window.REDUX_STATE;
+    const state2 = dom.window.__REACT_QUERY_STATE__;
+    console.log(state2.queries[0].state);
 };
