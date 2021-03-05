@@ -6,8 +6,12 @@ export const getText = (element: Element | Document, selector: string) => {
 
 export const getTextArray = (element: Element | Document, selector: string) => {
     return Array.from(element.querySelectorAll(selector)).map((el) =>
-        el.textContent?.trim()
+        el.textContent ? el.textContent.trim() : ''
     );
+};
+
+export const getArray = (element: Element | Document, selector: string) => {
+    return Array.from(element.querySelectorAll(selector));
 };
 
 export const getImage = (element: Element | Document, selector: string) => {

@@ -1,10 +1,16 @@
-import { getText, getTextArray } from './utils';
+import { getArray, getText, getTextArray } from './utils';
 
 export const getCompanyReportData = (doc: Document) => {
     const name = getText(doc, '[data-cy-id="company-header-title"]');
-    const sector = getText(doc, '[data-cy-id="child-link-2"]');
+    const info = getTextArray(
+        doc,
+        '[data-cy-id="report-sub-section-key-information"] li'
+    );
+    const sector = findString(info, 'Sector');
+    const industry = findString(info, 'Industry');
     const summary = getText(doc, '[data-cy-id="company-summary-desc"] span');
     const thesis = getText(doc, '[data-cy-id="company-fundamentals-desc"]');
+
     const insights = getInsights(doc);
     const risksAndRewards = getRisksAndRewards(
         doc.querySelectorAll('[data-cy-id="risk-reward-wrapper"] > *')
@@ -14,48 +20,151 @@ export const getCompanyReportData = (doc: Document) => {
             '[data-cy-id="report-sub-section-market-performance"] h4 + div'
         )
     );
-    const fairValuePercent = getText(
+    const fairValue = getPercentText(
         doc,
-        '[data-cy-id="key-metric-value-undervalued-compared-to-fair-value"]'
-    );
-    const fairValueText = getText(
-        doc,
+        '[data-cy-id="key-metric-value-undervalued-compared-to-fair-value"]',
         '[data-cy-id="key-metric-title-undervalued-compared-to-fair-value"]'
     );
-    const fairValue = { fairValuePercent, fairValueText };
+    const futureGrowth = getPercentText(
+        doc,
+        '[data-cy-id="key-metric-value-forecasted-annual-earnings-growth"]',
+        '[data-cy-id="key-metric-title-forecasted-annual-earnings-growth"]'
+    );
+    const pastPerf = getPercentText(
+        doc,
+        '[data-cy-id="key-metric-value-historical-annual-earnings-growth"]',
+        '[data-cy-id="key-metric-title-historical-annual-earnings-growth"]'
+    );
+    const dividend = getPercentText(
+        doc,
+        '[data-cy-id="key-metric-value-current-dividend-yield"]',
+        '[data-cy-id="key-metric-title-current-dividend-yield"]'
+    );
+    const management = getPercentText(
+        doc,
+        '[data-cy-id="key-metric-value-average-management-tenure"]',
+        '[data-cy-id="key-metric-title-average-management-tenure"]'
+    );
 
     return {
         name,
-        sector,
         summary,
+        sector,
+        industry,
         thesis,
+        info,
         risksAndRewards,
-        insights,
         perf,
         fairValue,
+        futureGrowth,
+        pastPerf,
+        dividend,
+        management,
+        insights,
     };
 };
 
+const findString = (arr: string[], searchStr: string) => {
+    const regExp = new RegExp(`${searchStr}:\\s(.+)`, 'i');
+    const [_, found] =
+        arr.find((str) => str.includes(searchStr))?.match(regExp) ?? [];
+
+    return found;
+};
+
+const getPercentText = (
+    doc: Document,
+    selectorPercent: string,
+    selectorText: string
+) => {
+    const percent = getText(doc, selectorPercent);
+    const text = getText(doc, selectorText);
+    return { percent, text };
+};
+
 const getInsights = (doc: Document) => {
-    const latestPrice = getTextArray(
+    const latestPrice = getInsightsArray(
         doc,
         '[data-cy-id="report-sub-section-latest-share-price-and-events"] p'
     );
-    const perf = getTextArray(
+    const perf = getInsightsArray(
         doc,
         '[data-cy-id="report-sub-section-market-performance"] blockquote p'
     );
-    const fairValue = getTextArray(
+    const fairValue = getInsightsArray(
         doc,
         '[data-cy-id="report-sub-section-share-price-vs-fair-value"] p'
     );
-    const pe = getTextArray(
+    const pe = getInsightsArray(
         doc,
         '[data-cy-id="report-sub-section-price-to-earnings-ratio"] p'
     );
-    const peg = getTextArray(
+    const peg = getInsightsArray(
         doc,
         '[data-cy-id="report-sub-section-price-to-earnings-growth-ratio"] p'
+    );
+    const pb = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-price-to-book-ratio"] p'
+    );
+    const futureGrowth = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-analyst-future-growth-forecasts"] p'
+    );
+    const futureRoe = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-future-return-on-equity"] p'
+    );
+    const earningsAndRevenueHistory = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-earnings-and-revenue-history"] p'
+    );
+    const pastEarningsGrowth = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-past-earnings-growth-analysis"] p'
+    );
+    const roe = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-return-on-equity"] p'
+    );
+    const financialPosition = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-financial-position-analysis"] p'
+    );
+    const deHistory = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-debt-to-equity-history-and-analysis"] p'
+    );
+
+    const vsMarket = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-dividend-yield-vs-market"] p'
+    );
+    const stabilityAndGrowth = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-stability-and-growth-of-payments"] p'
+    );
+    const currentPayout = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-current-payout-to-shareholders"] p'
+    );
+    const futurePayout = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-future-payout-to-shareholders"] p'
+    );
+
+    const ceoCompensation = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-ceo-compensation-analysis"] p'
+    );
+
+    const insiderTrading = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-insider-trading-volume"] p'
+    );
+    const ownershipBreakdown = getInsightsArray(
+        doc,
+        '[data-cy-id="report-sub-section-ownership-breakdown"] p'
     );
 
     return {
@@ -63,8 +172,36 @@ const getInsights = (doc: Document) => {
         perf,
         fairValue,
         pe,
-        peg
+        peg,
+        pb,
+        futureGrowth,
+        futureRoe,
+        earningsAndRevenueHistory,
+        pastEarningsGrowth,
+        roe,
+        financialPosition,
+        deHistory,
+        dividend: {
+            vsMarket,
+            stabilityAndGrowth,
+            currentPayout,
+            futurePayout,
+        },
+        ceoCompensation,
+        insiderTrading,
+        ownershipBreakdown,
     };
+};
+
+const getInsightsArray = (element: Element | Document, selector: string) => {
+    return getArray(element, selector).map((el) => {
+        const value = el.querySelector('[value]')?.getAttribute('value');
+        const text = el.textContent;
+        return {
+            value,
+            text,
+        };
+    });
 };
 
 const getPerfReport = (elements: NodeListOf<Element>) => {
