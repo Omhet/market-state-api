@@ -4,6 +4,12 @@ export const getText = (element: Element | Document, selector: string) => {
     return element.querySelector(selector)?.textContent?.trim();
 };
 
+export const getTextArray = (element: Element | Document, selector: string) => {
+    return Array.from(element.querySelectorAll(selector)).map((el) =>
+        el.textContent?.trim()
+    );
+};
+
 export const getImage = (element: Element | Document, selector: string) => {
     return element.querySelector(selector)?.getAttribute('src');
 };
