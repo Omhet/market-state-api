@@ -3,3 +3,4 @@ yarn-error.log
 dist
 .env
 *.html
+prepare-data/*.json
