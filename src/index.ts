@@ -4,6 +4,7 @@ import cache from 'express-aggressive-cache';
 import express from 'express';
 import { getFearAndGreedIndex, getVix, getUsdRub } from './parsers';
 import { getCompanyReport } from './company/report';
+import { searchForCompany } from './company/search';
 
 const app = express();
 
@@ -62,8 +63,8 @@ app.get('/search', async (req, res) => {
         return;
     }
 
-    // const data = await collectLinks(String(q));
-    res.json({});
+    const data = await searchForCompany(String(q));
+    res.json({ data });
 });
 
 const port = process.env.PORT || 3000;

@@ -4,3 +4,4 @@ dist
 .env
 *.html
 prepare-data/*.json
+.DS_Store

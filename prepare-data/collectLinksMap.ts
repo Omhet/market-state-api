@@ -1,9 +1,10 @@
-import { writeFile } from 'fs';
+import { readFileSync, writeFile, writeFileSync } from 'fs';
 import { join } from 'path';
 import { getArray, getDocumentElement, getLink, getText } from '../src/utils';
 
 const mainUrl = 'https://simplywall.st';
 const RuMarketUrl = 'https://simplywall.st/stocks/ru';
+const USMarketUrl = 'https://simplywall.st/stocks/us';
 
 const collectLinks = async (url: string) => {
     console.log('Parsing the first page...');
@@ -47,9 +48,30 @@ const getLinks = (doc: Document) => {
 };
 
 (async () => {
-    const links = await collectLinks(RuMarketUrl);
-    writeFile(join(__dirname, 'links.json'), JSON.stringify(links), (err) => {
+    const links = await collectLinks(USMarketUrl);
+    writeFile(join(__dirname, 'companies-us.json'), JSON.stringify(links), (err) => {
         if (err) throw err;
         console.log('complete');
     });
 })();
+
+// Remap
+// (() => {
+//     const data = JSON.parse(readFileSync(join(__dirname, 'us.json'), 'utf8'));
+//     const filtered = data.map(
+//         ({
+//             ticker,
+//             name,
+//             link,
+//         }: {
+//             ticker: string;
+//             name: string;
+//             link: string;
+//         }) => ({
+//             l: (link.match(/https:\/\/simplywall\.st(.+)/) ?? [])[1],
+//             t: ticker,
+//             n: name,
+//         })
+//     );
+//     writeFileSync('us-p.json', JSON.stringify(filtered));
+// })();
