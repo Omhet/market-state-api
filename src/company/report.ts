@@ -1,7 +1,9 @@
 import { getArray, getDocumentElement, getText, getTextArray } from '../utils';
 
+const MainUrl = 'https://simplywall.st';
+
 export const getCompanyReport = async (companyUrl: string) => {
-    const doc = await getDocumentElement(companyUrl);
+    const doc = await getDocumentElement(`${MainUrl}${companyUrl}`);
 
     const name = getText(doc, '[data-cy-id="company-header-title"]');
     const info = getTextArray(

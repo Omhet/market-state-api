@@ -38,15 +38,9 @@ app.get('/usd', async (_req, res) => {
     });
 });
 
-app.get('/company', async (_req, res) => {
-    const tempUrl =
-        'https://simplywall.st/stocks/ru/banks/mcx-sber/sberbank-of-russia-shares';
-    const tempUrl2 =
-        'https://simplywall.st/stocks/us/tech/nasdaq-csco/cisco-systems';
-
-    //  /stocks/:isoCode2/:industry/:exchange_ticker/:companyname
-
-    const data = await getCompanyReport(tempUrl);
+app.get('/company', async (req, res) => {
+    const { url } = req.query;
+    const data = await getCompanyReport(String(url));
     res.json({
         data,
     });
