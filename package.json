@@ -1,6 +1,7 @@
 {
     "scripts": {
         "start": "tsc && node ./dist",
+        "collect": "tsc && node ./dist/company/collectLinks.js",
         "dev": "tsc -w & nodemon ./dist"
     },
     "engines": {

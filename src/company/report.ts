@@ -1,6 +1,8 @@
-import { getArray, getText, getTextArray } from './utils';
+import { getArray, getDocumentElement, getText, getTextArray } from '../utils';
 
-export const getCompanyReportData = (doc: Document) => {
+export const getCompanyReport = async (companyUrl: string) => {
+    const doc = await getDocumentElement(companyUrl);
+
     const name = getText(doc, '[data-cy-id="company-header-title"]');
     const info = getTextArray(
         doc,

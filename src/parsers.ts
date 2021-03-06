@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom';
-import { getCompanyReportData } from './company';
 import { getBackroundImage, getDocumentElement, getText } from './utils';
 
 const FearAndGreedIndexUrl = 'https://money.cnn.com/data/fear-and-greed';
@@ -29,20 +27,4 @@ export const getUsdRub = async () => {
         ?.textContent;
 
     return { value, weekRange };
-};
-
-export const getCompanyReport = async (companyUrl: string) => {
-    const doc = await getDocumentElement(companyUrl);
-    return getCompanyReportData(doc);
-};
-
-// TODO: Search for a company by a ticker or name
-export const searchForCompany = async () => {
-    const dom = await JSDOM.fromURL('https://simplywall.st/stocks/ru', {
-        runScripts: 'dangerously',
-    });
-    const { document } = dom.window;
-    const state = dom.window.REDUX_STATE;
-    const state2 = dom.window.__REACT_QUERY_STATE__;
-    console.log(state2.queries[0].state);
 };
