@@ -29,42 +29,67 @@ export const getCompanyReport = async (companyUrl: string) => {
         '[data-cy-id="key-metric-value-undervalued-compared-to-fair-value"]',
         '[data-cy-id="key-metric-title-undervalued-compared-to-fair-value"]'
     );
-    const futureGrowth = getPercentText(
+    const futureGrowthValue = getPercentText(
         doc,
         '[data-cy-id="key-metric-value-forecasted-annual-earnings-growth"]',
         '[data-cy-id="key-metric-title-forecasted-annual-earnings-growth"]'
     );
-    const pastPerf = getPercentText(
+    const pastPerfValue = getPercentText(
         doc,
         '[data-cy-id="key-metric-value-historical-annual-earnings-growth"]',
         '[data-cy-id="key-metric-title-historical-annual-earnings-growth"]'
     );
-    const dividend = getPercentText(
+    const dividendYieldValue = getPercentText(
         doc,
         '[data-cy-id="key-metric-value-current-dividend-yield"]',
         '[data-cy-id="key-metric-title-current-dividend-yield"]'
     );
-    const management = getPercentText(
+    const managementTenureValue = getPercentText(
         doc,
         '[data-cy-id="key-metric-value-average-management-tenure"]',
         '[data-cy-id="key-metric-title-average-management-tenure"]'
     );
 
     return {
-        name,
-        summary,
-        sector,
-        industry,
-        thesis,
-        info,
-        risksAndRewards,
-        perf,
-        fairValue,
-        futureGrowth,
-        pastPerf,
-        dividend,
-        management,
-        insights,
+        general: {
+            name,
+            summary,
+            sector,
+            industry,
+            thesis,
+            info,
+            risksAndRewards,
+        },
+        price: {
+            perf,
+            insights: insights.price,
+        },
+        valuation: {
+            fairValue,
+            insights: insights.valuation,
+        },
+        finHealth: {
+            insights: insights.finHealth,
+        },
+        future: {
+            futureGrowthValue,
+            insights: insights.future,
+        },
+        past: {
+            pastPerfValue,
+            insights: insights.past,
+        },
+        dividend: {
+            dividendYieldValue,
+            insights: insights.dividend,
+        },
+        management: {
+            managementTenureValue,
+            insights: insights.management,
+        },
+        ownership: {
+            insights: insights.ownership,
+        },
     };
 };
 
@@ -172,28 +197,42 @@ const getInsights = (doc: Document) => {
     );
 
     return {
-        latestPrice,
-        perf,
-        fairValue,
-        pe,
-        peg,
-        pb,
-        futureGrowth,
-        futureRoe,
-        earningsAndRevenueHistory,
-        pastEarningsGrowth,
-        roe,
-        financialPosition,
-        deHistory,
+        price: {
+            latestPrice,
+            perf,
+        },
+        valuation: {
+            fairValue,
+            pe,
+            peg,
+            pb,
+        },
+        future: {
+            futureGrowth,
+            futureRoe,
+        },
+        past: {
+            earningsAndRevenueHistory,
+            pastEarningsGrowth,
+            roe,
+        },
+        finHealth: {
+            financialPosition,
+            deHistory,
+        },
         dividend: {
             vsMarket,
             stabilityAndGrowth,
             currentPayout,
             futurePayout,
         },
-        ceoCompensation,
-        insiderTrading,
-        ownershipBreakdown,
+        management: {
+            ceoCompensation,
+        },
+        ownership: {
+            insiderTrading,
+            ownershipBreakdown,
+        },
     };
 };
 
