@@ -65,26 +65,26 @@ export const getCompanyReport = async (companyUrl: string) => {
             insights: insights.price,
         },
         valuation: {
-            fairValue,
+            value: fairValue,
             insights: insights.valuation,
         },
         finHealth: {
             insights: insights.finHealth,
         },
         future: {
-            futureGrowthValue,
+            value: futureGrowthValue,
             insights: insights.future,
         },
         past: {
-            pastPerfValue,
+            value: pastPerfValue,
             insights: insights.past,
         },
         dividend: {
-            dividendYieldValue,
+            value: dividendYieldValue,
             insights: insights.dividend,
         },
         management: {
-            managementTenureValue,
+            value: managementTenureValue,
             insights: insights.management,
         },
         ownership: {
