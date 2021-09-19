@@ -50,9 +50,7 @@ app.get('/company', async (req, res) => {
 app.get('/div', async (req, res) => {
     const { t } = req.query;
     const data = await getCompanyDividend(String(t).toLowerCase());
-    res.json({
-        data,
-    });
+    res.json(data);
 });
 
 app.get('/search', async (req, res) => {
