@@ -1,10 +1,11 @@
 import compression from 'compression';
 import cors from 'cors';
-import cache from 'express-aggressive-cache';
 import express from 'express';
-import { getFearAndGreedIndex, getVix, getUsdRub } from './parsers';
+import cache from 'express-aggressive-cache';
 import { getCompanyReport } from './company/report';
 import { searchForCompany } from './company/search';
+import { getCompanyDividend } from './dividend';
+import { getFearAndGreedIndex, getUsdRub, getVix } from './parsers';
 
 const app = express();
 
@@ -41,6 +42,14 @@ app.get('/usd', async (_req, res) => {
 app.get('/company', async (req, res) => {
     const { url } = req.query;
     const data = await getCompanyReport(String(url));
+    res.json({
+        data,
+    });
+});
+
+app.get('/div', async (req, res) => {
+    const { t } = req.query;
+    const data = await getCompanyDividend(String(t).toLowerCase());
     res.json({
         data,
     });
